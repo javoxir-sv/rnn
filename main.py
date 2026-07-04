@@ -167,16 +167,14 @@ plt.show()
 #### Letter frequency chart
 """
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# letter_count = {key: 0 for key in string.ascii_lowercase}
-# 
-# for idx in range(df.shape[0]):
-#   name = df['name'][idx].lower()
-#   for let in name:
-#     letter_count[let] += 1
-# 
-# letter_count = pd.DataFrame(letter_count, index=[0]).T.reset_index(level=0)
+letter_count = {key: 0 for key in string.ascii_lowercase}
+
+for idx in range(df.shape[0]):
+  name = df['name'][idx].lower()
+  for let in name:
+    letter_count[let] += 1
+
+letter_count = pd.DataFrame(letter_count, index=[0]).T.reset_index(level=0)
 
 plt.figure(figsize=(6, 5))
 sns.barplot(data=letter_count, x='index', y=0, color='#31BCEB')
@@ -365,26 +363,24 @@ scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.15, last_e
 loss_multi = nn.CrossEntropyLoss(ignore_index=0)
 loss_bin = nn.BCELoss()
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# # Saving the losses to analyze them later
-# train_char_losses = []
-# train_gender_losses = []
-# valid_char_losses = []
-# valid_gender_losses = []
-# 
-# # Training loop, also tests
-# n_epochs = 10
-# for epoch in range(n_epochs):
-#   print(f"Epoch {epoch + 1:02d}:")
-#   avg_loss_chars_t, avg_loss_genders_t = train(model = rnn, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
-#   avg_loss_chars_v, avg_loss_genders_v = test(model = rnn, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
-#   scheduler.step()
-# 
-#   train_char_losses.append(avg_loss_chars_t)
-#   train_gender_losses.append(avg_loss_genders_t)
-#   valid_char_losses.append(avg_loss_chars_v)
-#   valid_gender_losses.append(avg_loss_genders_v)
+# Saving the losses to analyze them later
+train_char_losses = []
+train_gender_losses = []
+valid_char_losses = []
+valid_gender_losses = []
+
+# Training loop, also tests
+n_epochs = 10
+for epoch in range(n_epochs):
+  print(f"Epoch {epoch + 1:02d}:")
+  avg_loss_chars_t, avg_loss_genders_t = train(model = rnn, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
+  avg_loss_chars_v, avg_loss_genders_v = test(model = rnn, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
+  scheduler.step()
+
+  train_char_losses.append(avg_loss_chars_t)
+  train_gender_losses.append(avg_loss_genders_t)
+  valid_char_losses.append(avg_loss_chars_v)
+  valid_gender_losses.append(avg_loss_genders_v)
 
 """### Implementing a method to generate names from the trained model:
 
@@ -541,36 +537,32 @@ class FullGRU(nn.Module):
 
     return char_logits, gender_probs
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# gru = FullGRU(len(id_to_token), hidden_size=512)
-# gru = gru.to(device)
-# 
-# optimizer = optim.Adam(gru.parameters())
-# scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.15, last_epoch=-1)
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+gru = FullGRU(len(id_to_token), hidden_size=512)
+gru = gru.to(device)
+
+optimizer = optim.Adam(gru.parameters())
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.15, last_epoch=-1)
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
 
 """### Training the network using only loss for next letter prediction"""
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# train_char_losses = []
-# train_gender_losses = []
-# valid_char_losses = []
-# valid_gender_losses = []
-# 
-# n_epochs = 10
-# for epoch in range(n_epochs):
-#   print(f"Epoch {epoch + 1:02d}:")
-#   avg_loss_chars_t, avg_loss_genders_t = train(model = gru, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
-#   avg_loss_chars_v, avg_loss_genders_v = test(model = gru, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
-#   scheduler.step()
-# 
-#   train_char_losses.append(avg_loss_chars_t)
-#   train_gender_losses.append(avg_loss_genders_t)
-#   valid_char_losses.append(avg_loss_chars_v)
-#   valid_gender_losses.append(avg_loss_genders_v)
+train_char_losses = []
+train_gender_losses = []
+valid_char_losses = []
+valid_gender_losses = []
+
+n_epochs = 10
+for epoch in range(n_epochs):
+  print(f"Epoch {epoch + 1:02d}:")
+  avg_loss_chars_t, avg_loss_genders_t = train(model = gru, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
+  avg_loss_chars_v, avg_loss_genders_v = test(model = gru, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
+  scheduler.step()
+
+  train_char_losses.append(avg_loss_chars_t)
+  train_gender_losses.append(avg_loss_genders_t)
+  valid_char_losses.append(avg_loss_chars_v)
+  valid_gender_losses.append(avg_loss_genders_v)
 
 """### Evaluation
 
@@ -678,36 +670,32 @@ class FullLSTM(nn.Module):
 
     return char_logits, gender_probs
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# lstm = FullLSTM(len(id_to_token), hidden_size=512)
-# lstm = lstm.to(device)
-# 
-# optimizer = optim.Adam(lstm.parameters())
-# scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.15, last_epoch=-1)
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+lstm = FullLSTM(len(id_to_token), hidden_size=512)
+lstm = lstm.to(device)
+
+optimizer = optim.Adam(lstm.parameters())
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.15, last_epoch=-1)
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
 
 """### Training the network using only loss for next letter prediction"""
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# train_char_losses = []
-# train_gender_losses = []
-# valid_char_losses = []
-# valid_gender_losses = []
-# 
-# n_epochs = 10
-# for epoch in range(n_epochs):
-#   print(f"Epoch {epoch + 1:02d}:")
-#   avg_loss_chars_t, avg_loss_genders_t = train(model = lstm, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
-#   avg_loss_chars_v, avg_loss_genders_v = test(model = lstm, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
-#   scheduler.step()
-# 
-#   train_char_losses.append(avg_loss_chars_t)
-#   train_gender_losses.append(avg_loss_genders_t)
-#   valid_char_losses.append(avg_loss_chars_v)
-#   valid_gender_losses.append(avg_loss_genders_v)
+train_char_losses = []
+train_gender_losses = []
+valid_char_losses = []
+valid_gender_losses = []
+
+n_epochs = 10
+for epoch in range(n_epochs):
+  print(f"Epoch {epoch + 1:02d}:")
+  avg_loss_chars_t, avg_loss_genders_t = train(model = lstm, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer, device=device, task="char")
+  avg_loss_chars_v, avg_loss_genders_v = test(model = lstm, dataloader = valid_loader, loss_multi = loss_multi, loss_bin = loss_bin, device=device)
+  scheduler.step()
+
+  train_char_losses.append(avg_loss_chars_t)
+  train_gender_losses.append(avg_loss_genders_t)
+  valid_char_losses.append(avg_loss_chars_v)
+  valid_gender_losses.append(avg_loss_genders_v)
 
 """### Evaluation"""
 
@@ -906,61 +894,57 @@ plt.show()
 ### Let's train RNN, GRU, and LSTM, but with a different loss function: Binary Cross Entropy Loss.
 """
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# rnn = FullRNN(len(id_to_token), hidden_size=512).to(device)
-# gru = FullGRU(len(id_to_token), hidden_size=512).to(device)
-# lstm = FullLSTM(len(id_to_token), hidden_size=512).to(device)
-# 
-# # Each model has to have different optimizers and schedulers for each optimizer
-# optimizer_rnn = optim.Adam(rnn.parameters())
-# optimizer_gru = optim.Adam(gru.parameters())
-# optimizer_lstm = optim.Adam(lstm.parameters())
-# 
-# scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
-# 
-# # But we can re-use the same loss function again and again, because it just calculates the error.
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+rnn = FullRNN(len(id_to_token), hidden_size=512).to(device)
+gru = FullGRU(len(id_to_token), hidden_size=512).to(device)
+lstm = FullLSTM(len(id_to_token), hidden_size=512).to(device)
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# res_rnn = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
-# res_gru = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
-# res_lstm = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
-# 
-# n_epochs = 10
-# for epoch in range(n_epochs):
-#   print(f"Epoch {epoch}:")
-#   print("RNN:")
-#   rnn_train = train(model = rnn, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_rnn, device=device, logsoftmax=True, task="gender")
-#   rnn_test = test(model = rnn, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
-#   scheduler_rnn.step()
-# 
-#   print("GRU")
-#   gru_train = train(model = gru, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_gru, device=device, logsoftmax=True, task="gender")
-#   gru_test = test(model = gru, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
-#   scheduler_gru.step()
-# 
-#   print("LSTM")
-#   lstm_train = train(model = lstm, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_lstm, device=device, logsoftmax=True, task="gender")
-#   lstm_test = test(model = lstm, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
-#   scheduler_lstm.step()
-#   print("\n")
-# 
-# 
-#   # train() returns = avg_loss_chars, avg_loss_genders
-#   # test() returns = ((avg_loss_chars, avg_loss_genders), (avg_char_acc, avg_bin_acc), avg_roc)
-#   res_rnn.loc[len(res_rnn)] = [epoch, "RNN", "train", rnn_train[1]]
-#   res_rnn.loc[len(res_rnn)] = [epoch, "RNN", "valid", rnn_test[0][1]]
-# 
-#   res_gru.loc[len(res_gru)] = [epoch, "GRU", "train", gru_train[1]]
-#   res_gru.loc[len(res_gru)] = [epoch, "GRU", "valid", gru_test[0][1]]
-# 
-#   res_lstm.loc[len(res_lstm)] = [epoch, "LSTM", "train", lstm_train[1]]
-#   res_lstm.loc[len(res_lstm)] = [epoch, "LSTM", "valid", lstm_test[0][1]]
+# Each model has to have different optimizers and schedulers for each optimizer
+optimizer_rnn = optim.Adam(rnn.parameters())
+optimizer_gru = optim.Adam(gru.parameters())
+optimizer_lstm = optim.Adam(lstm.parameters())
+
+scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
+
+# But we can re-use the same loss function again and again, because it just calculates the error.
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
+
+res_rnn = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
+res_gru = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
+res_lstm = pd.DataFrame(columns=["epoch", "model", "Type(Loss/Acc)", "Loss"])
+
+n_epochs = 10
+for epoch in range(n_epochs):
+  print(f"Epoch {epoch}:")
+  print("RNN:")
+  rnn_train = train(model = rnn, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_rnn, device=device, logsoftmax=True, task="gender")
+  rnn_test = test(model = rnn, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
+  scheduler_rnn.step()
+
+  print("GRU")
+  gru_train = train(model = gru, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_gru, device=device, logsoftmax=True, task="gender")
+  gru_test = test(model = gru, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
+  scheduler_gru.step()
+
+  print("LSTM")
+  lstm_train = train(model = lstm, dataloader = train_loader, loss_multi = loss_multi, loss_bin = loss_bin, optimizer=optimizer_lstm, device=device, logsoftmax=True, task="gender")
+  lstm_test = test(model = lstm, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device, roc_auc=roc_auc_score, return_all=True, logsoftmax=True)
+  scheduler_lstm.step()
+  print("\n")
+
+
+  # train() returns = avg_loss_chars, avg_loss_genders
+  # test() returns = ((avg_loss_chars, avg_loss_genders), (avg_char_acc, avg_bin_acc), avg_roc)
+  res_rnn.loc[len(res_rnn)] = [epoch, "RNN", "train", rnn_train[1]]
+  res_rnn.loc[len(res_rnn)] = [epoch, "RNN", "valid", rnn_test[0][1]]
+
+  res_gru.loc[len(res_gru)] = [epoch, "GRU", "train", gru_train[1]]
+  res_gru.loc[len(res_gru)] = [epoch, "GRU", "valid", gru_test[0][1]]
+
+  res_lstm.loc[len(res_lstm)] = [epoch, "LSTM", "train", lstm_train[1]]
+  res_lstm.loc[len(res_lstm)] = [epoch, "LSTM", "valid", lstm_test[0][1]]
 
 """Accuracy is pretty based as usual.
 
@@ -1080,14 +1064,12 @@ class DebugRNN(nn.Module):
     gender_probs = self.sigmoid(gender_logits)
     return char_logits, gender_probs
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# drnn = DebugRNN(len(id_to_token), hidden_size=512, device=device)
-# drnn = drnn.to(device)
-# 
-# optimizer = optim.Adam(drnn.parameters())
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+drnn = DebugRNN(len(id_to_token), hidden_size=512, device=device)
+drnn = drnn.to(device)
+
+optimizer = optim.Adam(drnn.parameters())
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
 
 """### Debuging the gradient collection with batch_size=1 and n_epochs=1:
 
@@ -1130,27 +1112,25 @@ for t in range(x_test.size(0)):
 
 """
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# name_list = []
-# for idx in range(df_fixed.shape[0]):
-#   name = df_fixed['name'].iloc[idx].lower()
-#   lenn = len(name)
-# 
-#   temp_list = []
-#   temp_list.append("<SOS>")
-#   for let in name:
-#     temp_list.append(let)
-#   temp_list.append("<EOS>")
-#   name_list.append(temp_list)
-# 
-# tokenized_names = []
-# for name in name_list:
-#   tokenized = tokenize(name, token_to_id)
-#   tokenized_names.append(tokenized)
-# 
-# X_db = np.array(tokenized_names)
-# y_db = df_fixed['gender'].to_numpy()
+name_list = []
+for idx in range(df_fixed.shape[0]):
+  name = df_fixed['name'].iloc[idx].lower()
+  lenn = len(name)
+
+  temp_list = []
+  temp_list.append("<SOS>")
+  for let in name:
+    temp_list.append(let)
+  temp_list.append("<EOS>")
+  name_list.append(temp_list)
+
+tokenized_names = []
+for name in name_list:
+  tokenized = tokenize(name, token_to_id)
+  tokenized_names.append(tokenized)
+
+X_db = np.array(tokenized_names)
+y_db = df_fixed['gender'].to_numpy()
 
 X_train_db, X_valid_db, y_train_db, y_valid_db = train_test_split(X_db, y_db, random_state=42, shuffle=True, test_size=0.2)
 
@@ -1241,25 +1221,23 @@ class DebugLSTM(nn.Module):
     gender_probs = self.sigmoid(gender_logits)
     return char_logits, gender_probs
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# drnn = DebugRNN(len(id_to_token), hidden_size=512, device=device)
-# dgru = DebugGRU(len(id_to_token), hidden_size=512, device=device)
-# dlstm = DebugLSTM(len(id_to_token), hidden_size=512, device=device)
-# drnn = drnn.to(device)
-# dgru = dgru.to(device)
-# dlstm = dlstm.to(device)
-# 
-# optimizer_drnn = optim.Adam(drnn.parameters())
-# optimizer_dgru = optim.Adam(dgru.parameters())
-# optimizer_dlstm = optim.Adam(dlstm.parameters())
-# 
-# scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
-# 
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+drnn = DebugRNN(len(id_to_token), hidden_size=512, device=device)
+dgru = DebugGRU(len(id_to_token), hidden_size=512, device=device)
+dlstm = DebugLSTM(len(id_to_token), hidden_size=512, device=device)
+drnn = drnn.to(device)
+dgru = dgru.to(device)
+dlstm = dlstm.to(device)
+
+optimizer_drnn = optim.Adam(drnn.parameters())
+optimizer_dgru = optim.Adam(dgru.parameters())
+optimizer_dlstm = optim.Adam(dlstm.parameters())
+
+scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
+
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
 
 n_epochs = 10
 all_epochs_grads_rnn = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
@@ -1334,31 +1312,29 @@ scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15
 scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
 scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# n_epochs = 10
-# all_epochs_grads_rnn = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
-# all_epochs_grads_gru = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
-# all_epochs_grads_lstm = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
-# 
-# for epoch in range(n_epochs):
-#   with HiddenPrints():
-#     drnn.embedding.epoch_grads.zero_()
-#     dgru.embedding.epoch_grads.zero_()
-#     dlstm.embedding.epoch_grads.zero_()
-# 
-#     train(model=drnn, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_drnn, device=device, task="char")
-#     train(model=dgru, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_dgru, device=device, task="char")
-#     train(model=dlstm, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_dlstm, device=device, task="char")
-# 
-#     scheduler_rnn.step()
-#     scheduler_gru.step()
-#     scheduler_lstm.step()
-# 
-#     all_epochs_grads_rnn[epoch] = drnn.embedding.epoch_grads.clone()
-#     all_epochs_grads_gru[epoch] = dgru.embedding.epoch_grads.clone()
-#     all_epochs_grads_lstm[epoch] = dlstm.embedding.epoch_grads.clone()
-# print("Training finished..")
+n_epochs = 10
+all_epochs_grads_rnn = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
+all_epochs_grads_gru = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
+all_epochs_grads_lstm = torch.zeros(n_epochs, max_name_lenght, len(id_to_token), 64)
+
+for epoch in range(n_epochs):
+  with HiddenPrints():
+    drnn.embedding.epoch_grads.zero_()
+    dgru.embedding.epoch_grads.zero_()
+    dlstm.embedding.epoch_grads.zero_()
+
+    train(model=drnn, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_drnn, device=device, task="char")
+    train(model=dgru, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_dgru, device=device, task="char")
+    train(model=dlstm, dataloader=train_loader_db, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_dlstm, device=device, task="char")
+
+    scheduler_rnn.step()
+    scheduler_gru.step()
+    scheduler_lstm.step()
+
+    all_epochs_grads_rnn[epoch] = drnn.embedding.epoch_grads.clone()
+    all_epochs_grads_gru[epoch] = dgru.embedding.epoch_grads.clone()
+    all_epochs_grads_lstm[epoch] = dlstm.embedding.epoch_grads.clone()
+print("Training finished..")
 
 frobenius_norm_rnn = torch.linalg.norm(all_epochs_grads_rnn, dim=(2, 3), ord="fro")
 frobenius_mean_rnn = frobenius_norm_rnn.mean(dim=0)
@@ -1398,61 +1374,57 @@ If sequences varied in length, the final prediction (where the massive gradient 
 ### Training the GRU or LSTM model with 2 loss functions at the same time: the first is the loss for predicting the next letter, the second is the loss for gender classification.
 """
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# rnn = FullRNN(len(id_to_token), hidden_size=512)
-# gru = FullGRU(len(id_to_token), hidden_size=512)
-# lstm = FullLSTM(len(id_to_token), hidden_size=512)
-# rnn = rnn.to(device)
-# gru = gru.to(device)
-# lstm = lstm.to(device)
-# 
-# optimizer_rnn = optim.Adam(rnn.parameters())
-# optimizer_gru = optim.Adam(gru.parameters())
-# optimizer_lstm = optim.Adam(lstm.parameters())
-# 
-# scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
-# scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
-# 
-# # The loss functions
-# loss_multi = nn.CrossEntropyLoss(ignore_index=0)
-# loss_bin = nn.BCELoss()
+rnn = FullRNN(len(id_to_token), hidden_size=512)
+gru = FullGRU(len(id_to_token), hidden_size=512)
+lstm = FullLSTM(len(id_to_token), hidden_size=512)
+rnn = rnn.to(device)
+gru = gru.to(device)
+lstm = lstm.to(device)
 
-# Commented out IPython magic to ensure Python compatibility.
-# %%time
-# res_rnn = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
-# res_gru = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
-# res_lstm = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
-# 
-# n_epochs = 10
-# for epoch in range(n_epochs):
-#   print(f"Epoch {epoch+1:02d}:")
-#   with HiddenPrints():
-#     rnn_train = train(model=rnn, dataloader=train_loader, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_rnn, device=device, task="both")
-#     rnn_test = test(model=rnn, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
-#     scheduler_rnn.step()
-# 
-#     gru_train = train(model=gru, dataloader=train_loader, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_gru, device=device, task="both")
-#     gru_test = test(model=gru, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
-#     scheduler_gru.step()
-# 
-#     lstm_train = train(model=lstm, dataloader=train_loader, loss_multi=loss_multi, loss_bin = loss_bin, optimizer=optimizer_lstm, device=device, task="both")
-#     lstm_test = test(model=lstm, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
-#     scheduler_lstm.step()
-# 
-#   # train() => avg_loss_chars, avg_loss_genders
-#   # test() => avg_loss_chars, avg_loss_genders
-#   res_rnn.loc[len(res_rnn)] = [epoch+1, "RNN", "train", rnn_train[0], rnn_train[1]]
-#   res_rnn.loc[len(res_rnn)] = [epoch+1, "RNN", "valid", rnn_test[0], rnn_test[1]]
-# 
-#   res_gru.loc[len(res_gru)] = [epoch+1, "GRU", "train", gru_train[0], gru_train[1]]
-#   res_gru.loc[len(res_gru)] = [epoch+1, "GRU", "valid", gru_test[0], gru_test[1]]
-# 
-#   res_lstm.loc[len(res_lstm)] = [epoch+1, "LSTM", "train", lstm_train[0], lstm_train[1]]
-#   res_lstm.loc[len(res_lstm)] = [epoch+1, "LSTM", "valid", lstm_test[0], lstm_test[1]]
-# 
-# print("Finished.")
+optimizer_rnn = optim.Adam(rnn.parameters())
+optimizer_gru = optim.Adam(gru.parameters())
+optimizer_lstm = optim.Adam(lstm.parameters())
+
+scheduler_rnn = optim.lr_scheduler.StepLR(optimizer_rnn, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_gru = optim.lr_scheduler.StepLR(optimizer_gru, step_size=5, gamma=0.15, last_epoch=-1)
+scheduler_lstm = optim.lr_scheduler.StepLR(optimizer_lstm, step_size=5, gamma=0.15, last_epoch=-1)
+
+# The loss functions
+loss_multi = nn.CrossEntropyLoss(ignore_index=0)
+loss_bin = nn.BCELoss()
+
+res_rnn = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
+res_gru = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
+res_lstm = pd.DataFrame(columns=["epoch", "model", "dataset", "Loss(multi)", "Loss(binary)"])
+
+n_epochs = 10
+for epoch in range(n_epochs):
+  print(f"Epoch {epoch+1:02d}:")
+  with HiddenPrints():
+    rnn_train = train(model=rnn, dataloader=train_loader, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_rnn, device=device, task="both")
+    rnn_test = test(model=rnn, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
+    scheduler_rnn.step()
+
+    gru_train = train(model=gru, dataloader=train_loader, loss_multi=loss_multi, loss_bin=loss_bin, optimizer=optimizer_gru, device=device, task="both")
+    gru_test = test(model=gru, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
+    scheduler_gru.step()
+
+    lstm_train = train(model=lstm, dataloader=train_loader, loss_multi=loss_multi, loss_bin = loss_bin, optimizer=optimizer_lstm, device=device, task="both")
+    lstm_test = test(model=lstm, dataloader=valid_loader, loss_multi=loss_multi, loss_bin=loss_bin, device=device)
+    scheduler_lstm.step()
+
+  # train() => avg_loss_chars, avg_loss_genders
+  # test() => avg_loss_chars, avg_loss_genders
+  res_rnn.loc[len(res_rnn)] = [epoch+1, "RNN", "train", rnn_train[0], rnn_train[1]]
+  res_rnn.loc[len(res_rnn)] = [epoch+1, "RNN", "valid", rnn_test[0], rnn_test[1]]
+
+  res_gru.loc[len(res_gru)] = [epoch+1, "GRU", "train", gru_train[0], gru_train[1]]
+  res_gru.loc[len(res_gru)] = [epoch+1, "GRU", "valid", gru_test[0], gru_test[1]]
+
+  res_lstm.loc[len(res_lstm)] = [epoch+1, "LSTM", "train", lstm_train[0], lstm_train[1]]
+  res_lstm.loc[len(res_lstm)] = [epoch+1, "LSTM", "valid", lstm_test[0], lstm_test[1]]
+
+print("Finished.")
 
 """### Evaluation
 
